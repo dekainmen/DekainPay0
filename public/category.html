@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Category</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-brand-bg p-8">
+
+<h1 id="title"
+  class="text-3xl font-light mb-8">
+</h1>
+
+<div id="products"
+  class="grid grid-cols-3 gap-6">
+</div>
+
+<script>
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const category =
+  params.get("cat");
+
+document.getElementById(
+  "title"
+).innerText =
+  category;
+
+async function load() {
+
+  const res =
+    await fetch("/api/products");
+
+  const products =
+    await res.json();
+
+  const filtered =
+    products.filter(
+      p =>
+        p.category ===
+        category
+    );
+
+  const container =
+    document.getElementById(
+      "products"
+    );
+
+  filtered.forEach(p => {
+
+    container.innerHTML += `
+      <div class="p-4
+        border rounded">
+
+        <img src="${p.image}"
+          class="h-40 w-full
+          object-cover mb-2">
+
+        <h3>${p.name}</h3>
+
+        <p>₹${p.price}</p>
+
+      </div>
+    `;
+  });
+}
+
+load();
+</script>
+
+</body>
+</html>

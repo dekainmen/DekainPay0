@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            bg: "#F5F1EC",
+            cream: "#EFE7DE",
+            brown: "#8B5E3C",
+            dark: "#4A3426",
+            charcoal: "#1F1F1F",
+            border: "#D6CFC7"
+          }
+        }
+      }
+    }
+  }
+  </script>
+</head>
+
+<body class="bg-brand-bg text-brand-dark">
+
+<!-- Navbar -->
+<!-- Navbar -->
+<header class="
+  bg-brand-charcoal
+  text-white
+">
+
+  <div class="
+    max-w-7xl
+    mx-auto
+    flex
+    items-center
+    justify-between
+    px-8 py-4
+  ">
+
+    <!-- Logo -->
+    <h1 class="
+      text-xl
+      font-semibold
+      tracking-wide
+    ">
+      DEKAIN
+    </h1>
+
+    <!-- Navigation Links -->
+    <nav class="
+      hidden md:flex
+      space-x-8
+      text-sm
+      font-medium
+    ">
+
+      <a href="/category.html?cat=Clothing"
+        class="nav-link">Clothing</a>
+
+      <a href="/category.html?cat=Ethnics"
+        class="nav-link">Ethnics</a>
+
+      <a href="/category.html?cat=Footwear"
+        class="nav-link">Footwear</a>
+
+      <a href="/category.html?cat=Grooming"
+        class="nav-link">Grooming</a>
+
+      <a href="/category.html?cat=Watches"
+        class="nav-link">Watches</a>
+
+      <a href="/category.html?cat=Accessories"
+        class="nav-link">Accessories</a>
+
+      <a href="/contact.html"
+        class="nav-link">Bulk Orders</a>
+
+      <a href="/about.html"
+        class="nav-link">About Us</a>
+
+    </nav>
+
+    <!-- Cart -->
+    <a href="/cart.html"
+      class="
+        border border-white
+        px-4 py-2
+        rounded-lg
+        hover:bg-white
+        hover:text-black
+        transition
+      ">
+      Cart 🛒
+    </a>
+
+  </div>
+
+</header>
+
+  <!-- Customer Form -->
+  <div>
+
+    <h2 class="
+      text-2xl
+      font-light
+      mb-6
+    ">
+      Customer Details
+    </h2>
+
+    <div class="space-y-4">
+
+      <input id="name"
+        placeholder="Full Name"
+        class="w-full p-3
+        border border-brand-border
+        rounded-lg"
+      />
+
+      <input id="email"
+        placeholder="Email"
+        class="w-full p-3
+        border border-brand-border
+        rounded-lg"
+      />
+
+      <input id="phone"
+        placeholder="Phone"
+        class="w-full p-3
+        border border-brand-border
+        rounded-lg"
+      />
+
+      <textarea id="address"
+        placeholder="Address"
+        class="w-full p-3
+        border border-brand-border
+        rounded-lg"
+      ></textarea>
+
+    </div>
+
+  </div>
+
+  <!-- Order Summary -->
+  <div>
+
+    <h2 class="
+      text-2xl
+      font-light
+      mb-6
+    ">
+      Order Summary
+    </h2>
+
+    <div
+      id="summary"
+      class="space-y-3 mb-6"
+    ></div>
+
+    <h3
+      id="total"
+      class="
+        text-xl
+        font-semibold
+        mb-6
+      "
+    ></h3>
+
+    <button
+      id="payBtn"
+      onclick="payNow()"
+      class="
+        w-full
+        bg-brand-brown
+        text-white
+        py-3
+        rounded-lg
+        hover:bg-brand-dark
+        transition
+      "
+    >
+      Pay Now
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+/**
+ * Load cart
+ */
+const cart =
+  JSON.parse(
+    localStorage.getItem("cart")
+  ) || [];
+
+const container =
+  document.getElementById("summary");
+
+let total = 0;
+
+if (cart.length === 0) {
+
+  container.innerHTML =
+    "<p>Cart empty</p>";
+
+} else {
+
+  cart.forEach(item => {
+
+    const itemTotal =
+      item.price * item.qty;
+
+    total += itemTotal;
+
+    container.innerHTML += `
+      <div class="
+        flex justify-between
+        bg-brand-cream
+        border border-brand-border
+        p-3 rounded-lg
+      ">
+        <p>${item.name}</p>
+        <p>₹${itemTotal}</p>
+      </div>
+    `;
+  });
+}
+
+document.getElementById(
+  "total"
+).innerText =
+  "Total: ₹" + total;
+
+/**
+ * Validate + Pay
+ */
+async function payNow() {
+
+  const name =
+    document.getElementById("name").value;
+
+  const email =
+    document.getElementById("email").value;
+
+  const phone =
+    document.getElementById("phone").value;
+
+  if (!name || !phone) {
+
+    alert(
+      "Name & phone required"
+    );
+
+    return;
+  }
+
+  document.getElementById(
+    "payBtn"
+  ).innerText =
+    "Processing...";
+
+  const payload = {
+    products: cart,
+    customer: {
+      name,
+      email,
+      phone
+    }
+  };
+
+  const res =
+    await fetch(
+      "/api/payment/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+        body:
+          JSON.stringify(
+            payload
+          )
+      }
+    );
+
+  const data =
+    await res.json();
+
+  if (data.paymentUrl) {
+
+    window.location.href =
+      data.paymentUrl;
+
+  } else {
+
+    alert(
+      JSON.stringify(data)
+    );
+  }
+}
+</script>
+
+</body>
+</html>

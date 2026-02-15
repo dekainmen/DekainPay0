@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Success</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            bg: "#F5F1EC",
+            cream: "#EFE7DE",
+            brown: "#8B5E3C",
+            dark: "#4A3426",
+            charcoal: "#1F1F1F",
+            border: "#D6CFC7"
+          }
+        }
+      }
+    }
+  }
+  </script>
+</head>
+
+<body class="
+  bg-brand-bg
+  text-brand-dark
+  flex items-center
+  justify-center
+  h-screen
+">
+
+<div class="
+  bg-brand-cream
+  border border-brand-border
+  p-10
+  rounded-xl
+  text-center
+  shadow-lg
+  max-w-md
+">
+
+  <!-- Success Title -->
+  <h2 class="
+    text-3xl
+    font-light
+    mb-4
+    text-green-700
+  ">
+    Payment Successful
+  </h2>
+
+  <!-- Message -->
+  <p class="mb-4">
+    Your order has been placed successfully.
+  </p>
+
+  <!-- Order ID -->
+  <p
+    id="orderId"
+    class="
+      text-sm
+      text-gray-600
+      mb-6
+    "
+  >
+  </p>
+
+  <!-- CTA -->
+  <a
+    href="/"
+    class="
+      inline-block
+      bg-brand-brown
+      text-white
+      px-6 py-2
+      rounded-lg
+      hover:bg-brand-dark
+      transition
+    "
+  >
+    Continue Shopping
+  </a>
+
+</div>
+
+<script>
+/**
+ * Read order_id from URL
+ * Example:
+ * /success.html?order_id=ORD_123
+ */
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const orderId =
+  params.get("order_id");
+
+if (orderId) {
+
+  document.getElementById(
+    "orderId"
+  ).innerText =
+    "Order ID: " + orderId;
+}
+</script>
+
+</body>
+</html>

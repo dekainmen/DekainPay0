@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cart</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            bg: "#F5F1EC",
+            cream: "#EFE7DE",
+            brown: "#8B5E3C",
+            dark: "#4A3426",
+            charcoal: "#1F1F1F",
+            border: "#D6CFC7"
+          }
+        }
+      }
+    }
+  }
+  </script>
+</head>
+
+<body class="bg-brand-bg text-brand-dark p-8">
+
+<h1 class="text-3xl font-light mb-8">
+  Your Cart
+</h1>
+
+<div id="cartContainer"
+  class="space-y-4">
+</div>
+
+<h2 id="total"
+  class="text-xl font-semibold mt-6">
+</h2>
+
+<a href="/checkout.html"
+  class="
+    inline-block
+    mt-6
+    bg-brand-brown
+    text-white
+    px-6 py-3
+    rounded-lg
+  ">
+  Proceed to Checkout
+</a>
+
+<script>
+/**
+ * Load cart
+ */
+let cart =
+  JSON.parse(
+    localStorage.getItem("cart")
+  ) || [];
+
+function saveCart() {
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+}
+
+/**
+ * Render cart
+ */
+function renderCart() {
+
+  const container =
+    document.getElementById(
+      "cartContainer"
+    );
+
+  container.innerHTML = "";
+
+  let total = 0;
+
+  if (cart.length === 0) {
+
+    container.innerHTML =
+      "<p>Cart is empty</p>";
+
+    document.getElementById(
+      "total"
+    ).innerText = "";
+
+    return;
+  }
+
+  cart.forEach((item, index) => {
+
+    const itemTotal =
+      item.price * item.qty;
+
+    total += itemTotal;
+
+    container.innerHTML += `
+      <div class="
+        flex justify-between
+        items-center
+        bg-brand-cream
+        border border-brand-border
+        p-4 rounded-lg
+      ">
+
+        <!-- Product -->
+        <div class="flex items-center gap-4">
+
+          <img src="${item.image}"
+            class="w-16 h-16
+            object-cover rounded">
+
+          <div>
+            <h3>${item.name}</h3>
+            <p>₹${item.price}</p>
+          </div>
+
+        </div>
+
+        <!-- Qty Controls -->
+        <div class="
+          flex items-center gap-3
+        ">
+
+          <button
+            onclick="decreaseQty(${index})"
+            class="
+              px-3 py-1
+              bg-brand-border
+              rounded
+            ">
+            −
+          </button>
+
+          <span>${item.qty}</span>
+
+          <button
+            onclick="increaseQty(${index})"
+            class="
+              px-3 py-1
+              bg-brand-brown
+              text-white
+              rounded
+            ">
+            +
+          </button>
+
+        </div>
+
+        <!-- Remove -->
+        <button
+          onclick="removeItem(${index})"
+          class="text-red-600">
+          Remove
+        </button>
+
+      </div>
+    `;
+  });
+
+  document.getElementById(
+    "total"
+  ).innerText =
+    "Total: ₹" + total;
+}
+
+/**
+ * Increase qty
+ */
+function increaseQty(i) {
+
+  cart[i].qty += 1;
+
+  saveCart();
+  renderCart();
+}
+
+/**
+ * Decrease qty
+ */
+function decreaseQty(i) {
+
+  if (cart[i].qty > 1) {
+
+    cart[i].qty -= 1;
+
+  } else {
+
+    cart.splice(i, 1);
+  }
+
+  saveCart();
+  renderCart();
+}
+
+/**
+ * Remove item
+ */
+function removeItem(i) {
+
+  cart.splice(i, 1);
+
+  saveCart();
+  renderCart();
+}
+
+/**
+ * Init
+ */
+renderCart();
+</script>
+
+</body>
+</html>

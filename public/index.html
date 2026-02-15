@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dekain Men Shop</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Brand Theme Config -->
+  <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            bg: "#F5F1EC",
+            cream: "#EFE7DE",
+            brown: "#8B5E3C",
+            dark: "#4A3426",
+            charcoal: "#1F1F1F",
+            border: "#D6CFC7"
+          }
+        }
+      }
+    }
+  }
+  </script>
+
+  <!-- Nav Link Styling -->
+  <style>
+  .nav-link {
+    position: relative;
+    transition: 0.3s;
+  }
+
+  .nav-link:hover {
+    color: #EFE7DE;
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 1px;
+    background: white;
+    transition: 0.3s;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+  
+  </style>
+</head>
+
+<body class="bg-brand-bg text-brand-dark">
+
+  <!-- Header Navbar -->
+  <!-- Navbar -->
+<header class="bg-brand-charcoal text-white">
+
+  <div class="
+    max-w-7xl
+    mx-auto
+    flex
+    items-center
+    justify-between
+    px-8 py-4
+  ">
+
+    <!-- LEFT: Logo -->
+       <a href="/index.html"
+       class="
+         text-xl
+         font-semibold
+         tracking-wide
+         hover:opacity-80
+         transition
+       ">
+      DEKAIN
+    </a>
+
+    <!-- CENTER: Nav Links -->
+    <nav class="
+      hidden md:flex
+      space-x-8
+      text-sm
+      font-medium
+    ">
+
+      <a href="/category.html?cat=Clothing" class="nav-link">Clothing</a>
+      <a href="/category.html?cat=Ethnics" class="nav-link">Ethnics</a>
+      <a href="/category.html?cat=Footwear" class="nav-link">Footwear</a>
+      <a href="/category.html?cat=Grooming" class="nav-link">Grooming</a>
+      <a href="/category.html?cat=Watches" class="nav-link">Watches</a>
+      <a href="/category.html?cat=Accessories" class="nav-link">Accessories</a>
+      <a href="/contact.html" class="nav-link">Bulk Orders</a>
+      <a href="/about.html" class="nav-link">About Us</a>
+
+    </nav>
+
+    <!-- RIGHT: Search + Cart -->
+    <div class="
+      flex
+      items-center
+      space-x-4
+    ">
+
+      <!-- Search -->
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Search products..."
+        class="
+          px-3 py-1
+          rounded-lg
+          text-black
+          text-sm
+          focus:outline-none
+        "
+      />
+
+      <!-- Cart -->
+      <a href="/cart.html"
+        class="
+          border border-white
+          px-4 py-2
+          rounded-lg
+          hover:bg-white
+          hover:text-black
+          transition
+        ">
+        Cart 🛒
+      </a>
+
+    </div>
+
+  </div>
+
+</header>
+  <!-- Page Title -->
+  <h2 class="
+    text-3xl
+    font-light
+    tracking-wide
+    px-8 pt-8
+  ">
+    Luxury Collection
+  </h2>
+
+  <!-- Products Grid -->
+  <div
+    id="products"
+    class="
+      grid grid-cols-1
+      md:grid-cols-2
+      lg:grid-cols-3
+      gap-6
+      p-8
+    "
+  ></div>
+
+<script>
+/**
+ * Load products
+ */
+async function loadProducts() {
+
+  try {
+
+    const res =
+      await fetch("/api/products");
+
+    const products =
+      await res.json();
+
+    console.log("Products:", products);
+
+    const container =
+      document.getElementById("products");
+
+    container.innerHTML = "";
+
+    products.forEach(p => {
+
+      container.innerHTML += `
+        <div class="
+          bg-brand-cream
+          border border-brand-border
+          rounded-xl
+          hover:shadow-lg
+          transition
+          p-4
+        ">
+
+          <img
+            src="${
+              p.image ||
+              'https://picsum.photos/300'
+            }"
+            class="
+              w-full h-48
+              object-cover
+              rounded-lg
+              mb-3
+            "
+          />
+
+          <h3 class="
+            font-semibold
+            text-lg
+          ">
+            ${p.name}
+          </h3>
+
+          <p class="
+            text-brand-brown
+            font-semibold
+          ">
+            ₹${p.price}
+          </p>
+
+          <button
+            class="
+              bg-brand-brown
+              text-white
+              px-4 py-2 mt-3
+              rounded-lg
+              w-full
+              hover:bg-brand-dark
+              transition
+            "
+            onclick='addToCart(${JSON.stringify(p).replace(/'/g,"&apos;")})'
+          >
+            Add to Cart
+          </button>
+
+        </div>
+      `;
+    });
+
+  } catch (err) {
+
+    console.error(
+      "Product load error:",
+      err
+    );
+  }
+}
+
+/**
+ * Add to cart
+ */
+function addToCart(product) {
+
+  let cart =
+    JSON.parse(
+      localStorage.getItem("cart")
+    ) || [];
+
+  const existing =
+    cart.find(
+      item =>
+        item.id === product.id
+    );
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({
+      ...product,
+      qty: 1
+    });
+  }
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  alert("Added to cart");
+}
+
+/**
+ * Init
+ */
+loadProducts();
+</script>
+
+</body>
+</html>
