@@ -59,6 +59,12 @@ app.use(
   require("./routes/orders.routes")
 );
 
+// Products
+app.use(
+  "/api/products",
+  require("./routes/products.routes")
+);
+
 /**
  * ===============================
  * Gateway Return URL

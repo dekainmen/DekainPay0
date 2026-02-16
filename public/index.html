@@ -3,10 +3,8 @@
 <head>
   <title>Dekain Men Shop</title>
 
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Brand Theme Config -->
   <script>
   tailwind.config = {
     theme: {
@@ -25,268 +23,272 @@
     }
   }
   </script>
-
-  <!-- Nav Link Styling -->
-  <style>
-  .nav-link {
-    position: relative;
-    transition: 0.3s;
-  }
-
-  .nav-link:hover {
-    color: #EFE7DE;
-  }
-
-  .nav-link::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0%;
-    height: 1px;
-    background: white;
-    transition: 0.3s;
-  }
-
-  .nav-link:hover::after {
-    width: 100%;
-  }
-  
-  </style>
 </head>
 
 <body class="bg-brand-bg text-brand-dark">
 
-  <!-- Header Navbar -->
-  <!-- Navbar -->
+<!-- ================= HEADER ================= -->
 <header class="bg-brand-charcoal text-white">
 
   <div class="
-    max-w-7xl
-    mx-auto
-    flex
-    items-center
+    max-w-7xl mx-auto
+    flex items-center
     justify-between
     px-8 py-4
   ">
 
-    <!-- LEFT: Logo -->
-       <a href="/index.html"
-       class="
-         text-xl
-         font-semibold
-         tracking-wide
-         hover:opacity-80
-         transition
-       ">
+    <a href="/"
+      class="text-xl font-semibold tracking-wide">
       DEKAIN
     </a>
 
-    <!-- CENTER: Nav Links -->
     <nav class="
       hidden md:flex
       space-x-8
-      text-sm
-      font-medium
+      text-sm font-medium
     ">
-
-      <a href="/category.html?cat=Clothing" class="nav-link">Clothing</a>
-      <a href="/category.html?cat=Ethnics" class="nav-link">Ethnics</a>
-      <a href="/category.html?cat=Footwear" class="nav-link">Footwear</a>
-      <a href="/category.html?cat=Grooming" class="nav-link">Grooming</a>
-      <a href="/category.html?cat=Watches" class="nav-link">Watches</a>
-      <a href="/category.html?cat=Accessories" class="nav-link">Accessories</a>
-      <a href="/contact.html" class="nav-link">Bulk Orders</a>
-      <a href="/about.html" class="nav-link">About Us</a>
-
+      <a href="/category.html?cat=Clothing">Clothing</a>
+      <a href="/category.html?cat=Ethnics">Ethnics</a>
+      <a href="/category.html?cat=Footwear">Footwear</a>
+      <a href="/category.html?cat=Grooming">Grooming</a>
+      <a href="/category.html?cat=Watches">Watches</a>
+      <a href="/category.html?cat=Accessories">Accessories</a>
     </nav>
 
-    <!-- RIGHT: Search + Cart -->
-    <div class="
-      flex
-      items-center
-      space-x-4
-    ">
-
-      <!-- Search -->
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="Search products..."
-        class="
-          px-3 py-1
-          rounded-lg
-          text-black
-          text-sm
-          focus:outline-none
-        "
-      />
-
-      <!-- Cart -->
-      <a href="/cart.html"
-        class="
-          border border-white
-          px-4 py-2
-          rounded-lg
-          hover:bg-white
-          hover:text-black
-          transition
-        ">
-        Cart 🛒
-      </a>
-
-    </div>
+    <a href="/cart.html"
+      class="border px-4 py-2 rounded-lg">
+      Cart 🛒
+    </a>
 
   </div>
 
 </header>
-  <!-- Page Title -->
-  <h2 class="
-    text-3xl
-    font-light
-    tracking-wide
-    px-8 pt-8
+
+
+<!-- ================= HERO BANNER ================= -->
+<section class="relative">
+
+  <img
+    src="https://images.unsplash.com/photo-1516826957135-700dedea698c"
+    class="w-full h-[500px] object-cover"
+  />
+
+  <div class="
+    absolute inset-0
+    bg-black/40
+    flex flex-col
+    items-center
+    justify-center
+    text-white
+    text-center
   ">
-    Luxury Collection
+
+    <h1 class="
+      text-5xl font-light
+      mb-4
+    ">
+      Elevate Your Style
+    </h1>
+
+    <p class="mb-6 text-lg">
+      Premium fashion curated for modern men
+    </p>
+
+    <a href="/category.html?cat=Clothing"
+      class="
+        bg-white text-black
+        px-6 py-3
+        rounded-lg
+        font-medium
+      ">
+      Shop Now
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- ================= CATEGORY GRID ================= -->
+<section class="
+  max-w-7xl mx-auto
+  px-8 py-16
+">
+
+  <h2 class="
+    text-2xl font-light
+    mb-10
+  ">
+    Shop by Category
   </h2>
 
-  <!-- Products Grid -->
-  <div
-    id="products"
+  <div class="
+    grid grid-cols-2
+    md:grid-cols-3
+    lg:grid-cols-6
+    gap-6
+  ">
+
+    <!-- Category Card -->
+    <a href="/category.html?cat=Clothing"
+      class="category-card">
+
+      <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"/>
+
+      <span>Clothing</span>
+    </a>
+
+    <a href="/category.html?cat=Ethnics"
+      class="category-card">
+
+      <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf"/>
+
+      <span>Ethnics</span>
+    </a>
+
+    <a href="/category.html?cat=Footwear"
+      class="category-card">
+
+      <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"/>
+
+      <span>Footwear</span>
+    </a>
+
+    <a href="/category.html?cat=Grooming"
+      class="category-card">
+
+      <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad"/>
+
+      <span>Grooming</span>
+    </a>
+
+    <a href="/category.html?cat=Watches"
+      class="category-card">
+
+      <img src="https://images.unsplash.com/photo-1542496658-e33a6d0d50f6"/>
+
+      <span>Watches</span>
+    </a>
+
+    <a href="/category.html?cat=Accessories"
+      class="category-card">
+
+      <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7"/>
+
+      <span>Accessories</span>
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- ================= FEATURED ================= -->
+<section class="
+  max-w-7xl mx-auto
+  px-8 pb-20
+">
+
+  <h2 class="
+    text-2xl font-light
+    mb-10
+  ">
+    Featured Products
+  </h2>
+
+  <div id="featured"
     class="
       grid grid-cols-1
       md:grid-cols-2
-      lg:grid-cols-3
+      lg:grid-cols-4
       gap-6
-      p-8
-    "
-  ></div>
+    ">
+  </div>
+
+</section>
+
+
+<style>
+
+.category-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  text-align: center;
+  border: 1px solid #D6CFC7;
+  transition: .3s;
+}
+
+.category-card img {
+  height: 150px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.category-card span {
+  display: block;
+  padding: 12px;
+  font-weight: 500;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,.08);
+}
+
+</style>
+
 
 <script>
-/**
- * Load products
- */
-async function loadProducts() {
-
-  try {
-
-    const res =
-      await fetch("/api/products");
-
-    const products =
-      await res.json();
-
-    console.log("Products:", products);
-
-    const container =
-      document.getElementById("products");
-
-    container.innerHTML = "";
-
-    products.forEach(p => {
-
-      container.innerHTML += `
-        <div class="
-          bg-brand-cream
-          border border-brand-border
-          rounded-xl
-          hover:shadow-lg
-          transition
-          p-4
-        ">
-
-          <img
-            src="${
-              p.image ||
-              'https://picsum.photos/300'
-            }"
-            class="
-              w-full h-48
-              object-cover
-              rounded-lg
-              mb-3
-            "
-          />
-
-          <h3 class="
-            font-semibold
-            text-lg
-          ">
-            ${p.name}
-          </h3>
-
-          <p class="
-            text-brand-brown
-            font-semibold
-          ">
-            ₹${p.price}
-          </p>
-
-          <button
-            class="
-              bg-brand-brown
-              text-white
-              px-4 py-2 mt-3
-              rounded-lg
-              w-full
-              hover:bg-brand-dark
-              transition
-            "
-            onclick='addToCart(${JSON.stringify(p).replace(/'/g,"&apos;")})'
-          >
-            Add to Cart
-          </button>
-
-        </div>
-      `;
-    });
-
-  } catch (err) {
-
-    console.error(
-      "Product load error:",
-      err
-    );
-  }
-}
 
 /**
- * Add to cart
+ * Load featured products
+ * (first 8 for now)
  */
-function addToCart(product) {
+async function loadFeatured() {
 
-  let cart =
-    JSON.parse(
-      localStorage.getItem("cart")
-    ) || [];
+  const res =
+    await fetch("/api/products");
 
-  const existing =
-    cart.find(
-      item =>
-        item.id === product.id
+  const products =
+    await res.json();
+
+  const featured =
+    products.slice(0, 8);
+
+  const container =
+    document.getElementById(
+      "featured"
     );
 
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({
-      ...product,
-      qty: 1
-    });
-  }
+  featured.forEach(p => {
 
-  localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-  );
+    container.innerHTML += `
+      <div class="
+        bg-white
+        p-4
+        rounded-xl
+        border
+      ">
 
-  alert("Added to cart");
+        <img src="${p.image}"
+          class="h-40 w-full
+                 object-cover
+                 rounded mb-3">
+
+        <h3>${p.name}</h3>
+
+        <p class="text-brand-brown">
+          ₹${p.price}
+        </p>
+
+      </div>
+    `;
+  });
 }
 
-/**
- * Init
- */
-loadProducts();
+loadFeatured();
+
 </script>
 
 </body>

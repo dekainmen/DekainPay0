@@ -3,20 +3,141 @@
 <head>
   <title>Category</title>
 
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            bg: "#F5F1EC",
+            cream: "#EFE7DE",
+            brown: "#8B5E3C",
+            dark: "#4A3426",
+            charcoal: "#1F1F1F",
+            border: "#D6CFC7"
+          }
+        }
+      }
+    }
+  }
+  </script>
 </head>
 
-<body class="bg-brand-bg p-8">
+<body class="bg-brand-bg text-brand-dark">
 
-<h1 id="title"
-  class="text-3xl font-light mb-8">
-</h1>
+<!-- HEADER -->
+<header class="bg-brand-charcoal text-white">
 
+  <div class="
+    max-w-7xl mx-auto
+    flex items-center
+    justify-between
+    px-8 py-4
+  ">
+
+    <!-- Logo -->
+    <h1 class="
+      text-xl font-semibold
+      tracking-wide
+      cursor-pointer
+    "
+    onclick="window.location.href='/'">
+      DEKAIN
+    </h1>
+
+    <!-- Navigation -->
+    <nav class="
+      hidden md:flex
+      space-x-8
+      text-sm font-medium
+    ">
+
+      <a href="/category.html?cat=Clothing"
+        class="hover:text-gray-300">
+        Clothing
+      </a>
+
+      <a href="/category.html?cat=Ethnics"
+        class="hover:text-gray-300">
+        Ethnics
+      </a>
+
+      <a href="/category.html?cat=Footwear"
+        class="hover:text-gray-300">
+        Footwear
+      </a>
+
+      <a href="/category.html?cat=Grooming"
+        class="hover:text-gray-300">
+        Grooming
+      </a>
+
+      <a href="/category.html?cat=Watches"
+        class="hover:text-gray-300">
+        Watches
+      </a>
+
+      <a href="/category.html?cat=Accessories"
+        class="hover:text-gray-300">
+        Accessories
+      </a>
+
+      <a href="/bulk-orders.html"
+        class="hover:text-gray-300">
+        Bulk Orders
+      </a>
+
+      <a href="/about.html"
+        class="hover:text-gray-300">
+        About Us
+      </a>
+
+    </nav>
+
+    <!-- Cart -->
+    <a href="/cart.html"
+      class="
+        border border-white
+        px-4 py-2
+        rounded-lg
+        hover:bg-white
+        hover:text-black
+        transition
+      ">
+      Cart 🛒
+    </a>
+
+  </div>
+
+</header>
+
+<!-- TITLE -->
+<h2 id="title"
+  class="
+    text-3xl font-light
+    p-8
+  ">
+</h2>
+
+<!-- PRODUCTS GRID -->
 <div id="products"
-  class="grid grid-cols-3 gap-6">
+  class="
+    grid grid-cols-1
+    md:grid-cols-2
+    lg:grid-cols-3
+    gap-6
+    px-8 pb-12
+  ">
 </div>
 
 <script>
+
+/**
+ * Get category from URL
+ */
 const params =
   new URLSearchParams(
     window.location.search
@@ -25,51 +146,155 @@ const params =
 const category =
   params.get("cat");
 
+/**
+ * Set page title
+ */
 document.getElementById(
   "title"
 ).innerText =
-  category;
+  category + " Collection";
 
-async function load() {
+/**
+ * Load products from backend
+ */
+async function loadProducts() {
 
   const res =
-    await fetch("/api/products");
+    await fetch(
+      `/api/products?category=${category}`
+    );
 
   const products =
     await res.json();
-
-  const filtered =
-    products.filter(
-      p =>
-        p.category ===
-        category
-    );
 
   const container =
     document.getElementById(
       "products"
     );
 
-  filtered.forEach(p => {
+  if (!products.length) {
+
+    container.innerHTML =
+      "<p>No products found</p>";
+
+    return;
+  }
+
+  products.forEach(p => {
 
     container.innerHTML += `
-      <div class="p-4
-        border rounded">
+      <div class="
+        bg-white
+        rounded-xl
+        shadow
+        hover:shadow-lg
+        transition
+        p-4
+      ">
 
-        <img src="${p.image}"
-          class="h-40 w-full
-          object-cover mb-2">
+        <!-- Product Image -->
+        <img
+          src="${
+            p.image ||
+            "https://picsum.photos/300"
+          }"
+          class="
+            w-full h-44
+            object-cover
+            rounded-lg
+            mb-3
+            cursor-pointer
+          "
+          onclick="goToProduct('${p.id}')"
+        />
 
-        <h3>${p.name}</h3>
+        <!-- Product Name -->
+        <h3 class="
+          font-semibold
+          mb-1
+          cursor-pointer
+        "
+        onclick="goToProduct('${p.id}')">
+          ${p.name}
+        </h3>
 
-        <p>₹${p.price}</p>
+        <!-- Price -->
+        <p class="
+          text-brand-brown
+          font-medium
+          mb-3
+        ">
+          ₹${p.price}
+        </p>
+
+        <!-- Add To Cart -->
+        <button
+          onclick='addToCart(${JSON.stringify(p).replace(/'/g,"&apos;")})'
+          class="
+            bg-brand-brown
+            text-white
+            w-full
+            py-2
+            rounded-lg
+            hover:bg-brand-dark
+            transition
+          "
+        >
+          Add to Cart
+        </button>
 
       </div>
     `;
   });
 }
 
-load();
+/**
+ * Add product to cart
+ */
+function addToCart(product) {
+
+  let cart =
+    JSON.parse(
+      localStorage.getItem("cart")
+    ) || [];
+
+  const existing =
+    cart.find(
+      item => item.id === product.id
+    );
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({
+      ...product,
+      qty: 1
+    });
+  }
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cart)
+  );
+
+  alert("Added to cart");
+}
+
+/**
+ * Redirect to product page
+ * (Detail page will be built next)
+ */
+function goToProduct(id) {
+
+  window.location.href =
+    `/product.html?id=${id}`;
+}
+
+/**
+ * Initialize
+ */
+loadProducts();
+
 </script>
 
 </body>

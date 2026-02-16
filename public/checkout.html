@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Checkout</title>
+  <title>Checkout | Dekain</title>
 
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -27,62 +28,56 @@
 
 <body class="bg-brand-bg text-brand-dark">
 
-<!-- Navbar -->
-<!-- Navbar -->
-<header class="
-  bg-brand-charcoal
-  text-white
-">
+<!-- ================= HEADER ================= -->
+<header class="bg-brand-charcoal text-white">
 
   <div class="
-    max-w-7xl
-    mx-auto
-    flex
-    items-center
+    max-w-7xl mx-auto
+    flex items-center
     justify-between
     px-8 py-4
   ">
 
     <!-- Logo -->
     <h1 class="
-      text-xl
-      font-semibold
+      text-xl font-semibold
       tracking-wide
-    ">
+      cursor-pointer
+    "
+    onclick="window.location.href='/'">
       DEKAIN
     </h1>
 
-    <!-- Navigation Links -->
+    <!-- Navigation -->
     <nav class="
       hidden md:flex
       space-x-8
-      text-sm
-      font-medium
+      text-sm font-medium
     ">
 
       <a href="/category.html?cat=Clothing"
-        class="nav-link">Clothing</a>
+        class="hover:text-gray-300">Clothing</a>
 
       <a href="/category.html?cat=Ethnics"
-        class="nav-link">Ethnics</a>
+        class="hover:text-gray-300">Ethnics</a>
 
       <a href="/category.html?cat=Footwear"
-        class="nav-link">Footwear</a>
+        class="hover:text-gray-300">Footwear</a>
 
       <a href="/category.html?cat=Grooming"
-        class="nav-link">Grooming</a>
+        class="hover:text-gray-300">Grooming</a>
 
       <a href="/category.html?cat=Watches"
-        class="nav-link">Watches</a>
+        class="hover:text-gray-300">Watches</a>
 
       <a href="/category.html?cat=Accessories"
-        class="nav-link">Accessories</a>
+        class="hover:text-gray-300">Accessories</a>
 
-      <a href="/contact.html"
-        class="nav-link">Bulk Orders</a>
+      <a href="/bulk-orders.html"
+        class="hover:text-gray-300">Bulk Orders</a>
 
       <a href="/about.html"
-        class="nav-link">About Us</a>
+        class="hover:text-gray-300">About Us</a>
 
     </nav>
 
@@ -102,13 +97,22 @@
   </div>
 
 </header>
+<!-- =============== HEADER END =============== -->
 
-  <!-- Customer Form -->
+
+<!-- ================= PAGE ================= -->
+<div class="
+  max-w-7xl mx-auto
+  grid md:grid-cols-2
+  gap-10
+  p-8
+">
+
+  <!-- ========== CUSTOMER FORM ========== -->
   <div>
 
     <h2 class="
-      text-2xl
-      font-light
+      text-2xl font-light
       mb-6
     ">
       Customer Details
@@ -118,60 +122,66 @@
 
       <input id="name"
         placeholder="Full Name"
-        class="w-full p-3
-        border border-brand-border
-        rounded-lg"
-      />
+        class="
+          w-full p-3
+          border border-brand-border
+          rounded-lg
+          bg-white
+        " />
 
       <input id="email"
         placeholder="Email"
-        class="w-full p-3
-        border border-brand-border
-        rounded-lg"
-      />
+        class="
+          w-full p-3
+          border border-brand-border
+          rounded-lg
+          bg-white
+        " />
 
       <input id="phone"
         placeholder="Phone"
-        class="w-full p-3
-        border border-brand-border
-        rounded-lg"
-      />
+        class="
+          w-full p-3
+          border border-brand-border
+          rounded-lg
+          bg-white
+        " />
 
       <textarea id="address"
         placeholder="Address"
-        class="w-full p-3
-        border border-brand-border
-        rounded-lg"
-      ></textarea>
+        class="
+          w-full p-3
+          border border-brand-border
+          rounded-lg
+          bg-white
+        ">
+      </textarea>
 
     </div>
 
   </div>
 
-  <!-- Order Summary -->
+
+  <!-- ========== ORDER SUMMARY ========== -->
   <div>
 
     <h2 class="
-      text-2xl
-      font-light
+      text-2xl font-light
       mb-6
     ">
       Order Summary
     </h2>
 
-    <div
-      id="summary"
-      class="space-y-3 mb-6"
-    ></div>
+    <div id="summary"
+      class="space-y-3 mb-6">
+    </div>
 
-    <h3
-      id="total"
+    <h3 id="total"
       class="
-        text-xl
-        font-semibold
+        text-xl font-semibold
         mb-6
-      "
-    ></h3>
+      ">
+    </h3>
 
     <button
       id="payBtn"
@@ -184,8 +194,7 @@
         rounded-lg
         hover:bg-brand-dark
         transition
-      "
-    >
+      ">
       Pay Now
     </button>
 
@@ -193,7 +202,9 @@
 
 </div>
 
+
 <script>
+
 /**
  * Load cart
  */
@@ -207,10 +218,17 @@ const container =
 
 let total = 0;
 
+/**
+ * Empty cart check
+ */
 if (cart.length === 0) {
 
   container.innerHTML =
     "<p>Cart empty</p>";
+
+  document.getElementById(
+    "payBtn"
+  ).disabled = true;
 
 } else {
 
@@ -228,20 +246,24 @@ if (cart.length === 0) {
         border border-brand-border
         p-3 rounded-lg
       ">
-        <p>${item.name}</p>
+        <p>${item.name} × ${item.qty}</p>
         <p>₹${itemTotal}</p>
       </div>
     `;
   });
 }
 
+/**
+ * Total render
+ */
 document.getElementById(
   "total"
 ).innerText =
   "Total: ₹" + total;
 
+
 /**
- * Validate + Pay
+ * Validate + Initiate Payment
  */
 async function payNow() {
 
@@ -287,9 +309,7 @@ async function payNow() {
             "application/json"
         },
         body:
-          JSON.stringify(
-            payload
-          )
+          JSON.stringify(payload)
       }
     );
 
@@ -306,8 +326,14 @@ async function payNow() {
     alert(
       JSON.stringify(data)
     );
+
+    document.getElementById(
+      "payBtn"
+    ).innerText =
+      "Pay Now";
   }
 }
+
 </script>
 
 </body>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cart</title>
+  <title>Cart | Dekain</title>
 
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <script>
@@ -25,33 +26,115 @@
   </script>
 </head>
 
-<body class="bg-brand-bg text-brand-dark p-8">
+<body class="bg-brand-bg text-brand-dark">
 
-<h1 class="text-3xl font-light mb-8">
-  Your Cart
-</h1>
+<!-- ================= HEADER ================= -->
+<header class="bg-brand-charcoal text-white">
 
-<div id="cartContainer"
-  class="space-y-4">
+  <div class="
+    max-w-7xl mx-auto
+    flex items-center
+    justify-between
+    px-8 py-4
+  ">
+
+    <!-- Logo -->
+    <h1 class="
+      text-xl font-semibold
+      tracking-wide
+      cursor-pointer
+    "
+    onclick="window.location.href='/'">
+      DEKAIN
+    </h1>
+
+    <!-- Navigation -->
+    <nav class="
+      hidden md:flex
+      space-x-8
+      text-sm font-medium
+    ">
+
+      <a href="/category.html?cat=Clothing"
+        class="hover:text-gray-300">Clothing</a>
+
+      <a href="/category.html?cat=Ethnics"
+        class="hover:text-gray-300">Ethnics</a>
+
+      <a href="/category.html?cat=Footwear"
+        class="hover:text-gray-300">Footwear</a>
+
+      <a href="/category.html?cat=Grooming"
+        class="hover:text-gray-300">Grooming</a>
+
+      <a href="/category.html?cat=Watches"
+        class="hover:text-gray-300">Watches</a>
+
+      <a href="/category.html?cat=Accessories"
+        class="hover:text-gray-300">Accessories</a>
+
+      <a href="/bulk-orders.html"
+        class="hover:text-gray-300">Bulk Orders</a>
+
+      <a href="/about.html"
+        class="hover:text-gray-300">About Us</a>
+
+    </nav>
+
+    <!-- Cart -->
+    <a href="/cart.html"
+      class="
+        border border-white
+        px-4 py-2
+        rounded-lg
+        bg-white text-black
+      ">
+      Cart 🛒
+    </a>
+
+  </div>
+
+</header>
+<!-- =============== HEADER END =============== -->
+
+
+<!-- ================= PAGE ================= -->
+<div class="max-w-6xl mx-auto p-8">
+
+  <h1 class="text-3xl font-light mb-8">
+    Your Cart
+  </h1>
+
+  <!-- Cart Items -->
+  <div id="cartContainer"
+    class="space-y-4">
+  </div>
+
+  <!-- Total -->
+  <h2 id="total"
+    class="text-xl font-semibold mt-6">
+  </h2>
+
+  <!-- Checkout -->
+  <a href="/checkout.html"
+    class="
+      inline-block
+      mt-6
+      bg-brand-brown
+      text-white
+      px-6 py-3
+      rounded-lg
+      hover:bg-brand-dark
+      transition
+    ">
+    Proceed to Checkout
+  </a>
+
 </div>
 
-<h2 id="total"
-  class="text-xl font-semibold mt-6">
-</h2>
-
-<a href="/checkout.html"
-  class="
-    inline-block
-    mt-6
-    bg-brand-brown
-    text-white
-    px-6 py-3
-    rounded-lg
-  ">
-  Proceed to Checkout
-</a>
 
 <script>
+
 /**
  * Load cart
  */
@@ -60,6 +143,9 @@ let cart =
     localStorage.getItem("cart")
   ) || [];
 
+/**
+ * Save cart
+ */
 function saveCart() {
 
   localStorage.setItem(
@@ -102,6 +188,7 @@ function renderCart() {
     total += itemTotal;
 
     container.innerHTML += `
+
       <div class="
         flex justify-between
         items-center
@@ -110,16 +197,27 @@ function renderCart() {
         p-4 rounded-lg
       ">
 
-        <!-- Product -->
-        <div class="flex items-center gap-4">
+        <!-- Product Info -->
+        <div class="
+          flex items-center gap-4
+          w-1/2
+        ">
 
           <img src="${item.image}"
-            class="w-16 h-16
-            object-cover rounded">
+            class="
+              w-16 h-16
+              object-cover
+              rounded
+            ">
 
           <div>
-            <h3>${item.name}</h3>
-            <p>₹${item.price}</p>
+            <h3 class="font-medium">
+              ${item.name}
+            </h3>
+
+            <p class="text-brand-brown">
+              ₹${item.price}
+            </p>
           </div>
 
         </div>
@@ -139,7 +237,9 @@ function renderCart() {
             −
           </button>
 
-          <span>${item.qty}</span>
+          <span class="font-medium">
+            ${item.qty}
+          </span>
 
           <button
             onclick="increaseQty(${index})"
@@ -157,11 +257,15 @@ function renderCart() {
         <!-- Remove -->
         <button
           onclick="removeItem(${index})"
-          class="text-red-600">
+          class="
+            text-red-600
+            font-medium
+          ">
           Remove
         </button>
 
       </div>
+
     `;
   });
 
@@ -170,6 +274,7 @@ function renderCart() {
   ).innerText =
     "Total: ₹" + total;
 }
+
 
 /**
  * Increase qty
@@ -215,6 +320,7 @@ function removeItem(i) {
  * Init
  */
 renderCart();
+
 </script>
 
 </body>
