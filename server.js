@@ -61,72 +61,53 @@ app.use(
 
 /**
  * ===============================
- * Gateway Return URL (UPDATED)
+ * Gateway Return URL (SAFE)
  * ===============================
  * Handles redirect from gateway
  * Supports GET + POST
+ * Crash-protected
  */
 
-app.all(
-  "/payment-return",
-  (req, res) => {
+app.all("/payment-return", (req, res) => {
 
-    console.log(
-      "==============================="
-    );
-    console.log(
-      "PAYMENT RETURN HIT"
-    );
-    console.log(
-      "METHOD:",
-      req.method
-    );
-    console.log(
-      "QUERY:",
-      req.query
-    );
-    console.log(
-      "BODY:",
-      req.body
-    );
-    console.log(
-      "==============================="
-    );
+  console.log("=================================");
+  console.log("PAYMENT RETURN HIT");
+  console.log("METHOD:", req.method);
+  console.log("QUERY:", req.query);
+  console.log("BODY:", req.body);
+  console.log("=================================");
+
+  try {
 
     /**
-     * Extract params safely
-     * Gateways send different keys
+     * Merge query + body safely
      */
+    const data = {
+      ...(req.query || {}),
+      ...(req.body || {})
+    };
 
+    /**
+     * Extract status safely
+     */
     const status =
-      req.body.status ||
-      req.body.txn_status ||
-      req.body.payment_status ||
-      req.body.result ||
-      req.body.paymentStatus ||
-      req.query.status ||
-      req.query.txn_status ||
-      req.query.payment_status ||
-      req.query.result ||
-      req.query.paymentStatus ||
+      data.status ||
+      data.txn_status ||
+      data.payment_status ||
+      data.result ||
+      data.paymentStatus ||
       "UNKNOWN";
 
-    const order_id =
-      req.body.order_id ||
-      req.body.txnid ||
-      req.body.orderId ||
-      req.body.merchant_order_id ||
-      req.body.orderid ||
-      req.query.order_id ||
-      req.query.txnid ||
-      req.query.orderId ||
-      req.query.merchant_order_id ||
-      req.query.orderid ||
-      "NA";
-
     /**
-     * Normalize status
+     * Extract order id safely
      */
+    const order_id =
+      data.order_id ||
+      data.txnid ||
+      data.orderId ||
+      data.merchant_order_id ||
+      data.orderid ||
+      "NA";
 
     const normalizedStatus =
       String(status).toUpperCase();
@@ -141,7 +122,6 @@ app.all(
     /**
      * SUCCESS CASE
      */
-
     if (
       normalizedStatus === "SUCCESS" ||
       normalizedStatus === "COMPLETED" ||
@@ -154,14 +134,24 @@ app.all(
     }
 
     /**
-     * FAILURE / CANCELLED / UNKNOWN
+     * FAILURE / DEFAULT
      */
-
     return res.redirect(
       `/failure.html?order_id=${order_id}`
     );
+
+  } catch (error) {
+
+    console.error(
+      "RETURN ROUTE ERROR:",
+      error
+    );
+
+    return res
+      .status(500)
+      .send("Return handling error");
   }
-);
+});
 
 /**
  * ===============================
