@@ -10,21 +10,39 @@ module.exports =
   try {
 
     console.log(
-      "WEBHOOK RECEIVED:",
+      "==============================="
+    );
+    console.log(
+      "WEBHOOK RECEIVED"
+    );
+    console.log(
+      "HEADERS:",
+      req.headers
+    );
+    console.log(
+      "BODY:",
       req.body
+    );
+    console.log(
+      "==============================="
     );
 
     const {
       status,
-      order_id,
-      amount,
-      remark1,
-      remark2
+      order_id
     } = req.body;
 
+    /**
+     * Validate order_id
+     */
     if (!order_id) {
 
-      return res.status(400)
+      console.log(
+        "Missing order_id in webhook"
+      );
+
+      return res
+        .status(400)
         .send("Missing order_id");
     }
 
@@ -43,37 +61,47 @@ module.exports =
         order_id
       );
 
-      return res.status(404)
+      return res
+        .status(404)
         .send("Order not found");
     }
 
     /**
-     * Safe parse
+     * Safe parse KV data
      */
-    let order;
-
-    if (typeof existing === "string") {
-      order = JSON.parse(existing);
-    } else {
-      order = existing;
-    }
+    const order =
+      typeof existing === "string"
+        ? JSON.parse(existing)
+        : existing;
 
     /**
-     * Map gateway status
+     * Normalize gateway status
      */
+    const normalized =
+      String(status || "")
+        .toUpperCase();
+
     let paymentStatus =
       "PENDING";
 
-    if (status === "SUCCESS") {
+    if (
+      normalized === "SUCCESS" ||
+      normalized === "COMPLETED" ||
+      normalized === "PAID"
+    ) {
       paymentStatus = "SUCCESS";
     }
 
-    if (status === "FAILED") {
+    if (
+      normalized === "FAILED" ||
+      normalized === "FAILURE" ||
+      normalized === "CANCELLED"
+    ) {
       paymentStatus = "FAILED";
     }
 
     /**
-     * Update order
+     * Update order record
      */
     order.status =
       paymentStatus;
@@ -85,7 +113,7 @@ module.exports =
       Date.now();
 
     /**
-     * Save back to KV
+     * Persist update
      */
     await kv.set(
       `order:${order_id}`,
@@ -98,6 +126,9 @@ module.exports =
       paymentStatus
     );
 
+    /**
+     * Acknowledge gateway
+     */
     res.send(
       "Webhook processed"
     );
@@ -109,7 +140,8 @@ module.exports =
       err
     );
 
-    res.status(500)
+    res
+      .status(500)
       .send("Webhook failed");
   }
 };
