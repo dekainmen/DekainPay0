@@ -16,7 +16,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // Parse x-www-form-urlencoded
-// (Required for payment webhooks)
+// Required for payment redirects + webhooks
 app.use(
   bodyParser.urlencoded({
     extended: true
@@ -41,57 +41,111 @@ app.use(
  * ===============================
  */
 
-// Payment Routes (Create + Webhook)
+// Payment Routes
 app.use(
   "/api/payment",
   require("./routes/payment.routes")
 );
 
-// Products
+// Products Routes
 app.use(
   "/api/products",
   require("./routes/products.routes")
 );
 
-// Orders
+// Orders Routes
 app.use(
   "/api/orders",
   require("./routes/orders.routes")
 );
 
-// Products
-app.use(
-  "/api/products",
-  require("./routes/products.routes")
-);
-
 /**
  * ===============================
- * Gateway Return URL
+ * Gateway Return URL (UPDATED)
  * ===============================
- * Handles payment redirect
+ * Handles redirect from gateway
+ * Supports GET + POST
  */
 
-app.get(
+app.all(
   "/payment-return",
   (req, res) => {
 
     console.log(
-      "Payment Redirect Hit:",
+      "==============================="
+    );
+    console.log(
+      "PAYMENT RETURN HIT"
+    );
+    console.log(
+      "METHOD:",
+      req.method
+    );
+    console.log(
+      "QUERY:",
       req.query
     );
-
-    const {
-      status,
-      order_id
-    } = req.query;
+    console.log(
+      "BODY:",
+      req.body
+    );
+    console.log(
+      "==============================="
+    );
 
     /**
-     * SUCCESS
+     * Extract params safely
+     * Gateways send different keys
      */
+
+    const status =
+      req.body.status ||
+      req.body.txn_status ||
+      req.body.payment_status ||
+      req.body.result ||
+      req.body.paymentStatus ||
+      req.query.status ||
+      req.query.txn_status ||
+      req.query.payment_status ||
+      req.query.result ||
+      req.query.paymentStatus ||
+      "UNKNOWN";
+
+    const order_id =
+      req.body.order_id ||
+      req.body.txnid ||
+      req.body.orderId ||
+      req.body.merchant_order_id ||
+      req.body.orderid ||
+      req.query.order_id ||
+      req.query.txnid ||
+      req.query.orderId ||
+      req.query.merchant_order_id ||
+      req.query.orderid ||
+      "NA";
+
+    /**
+     * Normalize status
+     */
+
+    const normalizedStatus =
+      String(status).toUpperCase();
+
+    console.log(
+      "Normalized Status:",
+      normalizedStatus,
+      "Order ID:",
+      order_id
+    );
+
+    /**
+     * SUCCESS CASE
+     */
+
     if (
-      status === "SUCCESS" ||
-      status === "success"
+      normalizedStatus === "SUCCESS" ||
+      normalizedStatus === "COMPLETED" ||
+      normalizedStatus === "PAID"
     ) {
 
       return res.redirect(
@@ -102,6 +156,7 @@ app.get(
     /**
      * FAILURE / CANCELLED / UNKNOWN
      */
+
     return res.redirect(
       `/failure.html?order_id=${order_id}`
     );

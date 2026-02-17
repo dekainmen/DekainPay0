@@ -66,9 +66,15 @@ const phone =
       orderId
     );
 
+    console.log(
+      "RETURN_URL VALUE:",
+      process.env.RETURN_URL
+    );
+    
     /**
      * Call payment gateway
      */
+    
     const response =
       await paymentService.createOrder({
         order_id: orderId,
