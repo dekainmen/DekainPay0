@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product | Dekain</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            bg: "#F5F1EC",
+            cream: "#EFE7DE",
+            brown: "#8B5E3C",
+            dark: "#4A3426",
+            charcoal: "#1F1F1F",
+            border: "#D6CFC7"
+          }
+        }
+      }
+    }
+  }
+  </script>
+</head>
+
+<body class="bg-brand-bg text-brand-dark">
+
+<!-- ================= HEADER ================= -->
+<header class="bg-brand-charcoal text-white">
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-8 py-4">
+
+    <h1 class="text-xl font-semibold tracking-wide cursor-pointer"
+      onclick="window.location.href='/'">
+      DEKAIN
+    </h1>
+
+    <nav class="hidden md:flex space-x-8 text-sm font-medium">
+      <a href="/category.html?cat=Clothing" class="hover:text-gray-300">Clothing</a>
+      <a href="/category.html?cat=Ethnics" class="hover:text-gray-300">Ethnics</a>
+      <a href="/category.html?cat=Footwear" class="hover:text-gray-300">Footwear</a>
+      <a href="/category.html?cat=Grooming" class="hover:text-gray-300">Grooming</a>
+      <a href="/category.html?cat=Watches" class="hover:text-gray-300">Watches</a>
+      <a href="/category.html?cat=Accessories" class="hover:text-gray-300">Accessories</a>
+    </nav>
+
+    <a href="/cart.html"
+      class="border border-white px-4 py-2 rounded-lg bg-white text-black">
+      Cart 🛒
+    </a>
+
+  </div>
+</header>
+<!-- =============== HEADER END =============== -->
+
+
+<!-- ================= PDP ================= -->
+<div class="max-w-6xl mx-auto p-8">
+
+  <div class="grid md:grid-cols-2 gap-10 items-start">
+
+    <!-- Image -->
+    <img id="image"
+      class="w-full rounded-lg border border-brand-border object-cover"/>
+
+    <!-- Details -->
+    <div>
+
+      <h1 id="name"
+        class="text-2xl font-medium mb-4">
+      </h1>
+
+      <p id="price"
+        class="text-xl text-brand-brown mb-2">
+      </p>
+
+      <p id="category"
+        class="text-sm text-gray-600 mb-6">
+      </p>
+
+      <!-- Buttons -->
+      <div class="flex gap-4">
+
+        <button id="addToCartBtn"
+          class="
+            bg-brand-brown text-white
+            px-6 py-3 rounded-lg
+            hover:bg-brand-dark transition
+          ">
+          Add to Cart
+        </button>
+
+        <button onclick="goToCart()"
+          class="
+            border border-brand-brown
+            text-brand-brown
+            px-6 py-3 rounded-lg
+            hover:bg-brand-brown hover:text-white
+            transition
+          ">
+          Go to Cart
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+let currentProduct = null;
+
+async function loadPDP() {
+  try {
+    const res = await fetch(`/api/products/${id}`);
+    if (!res.ok) throw new Error();
+
+    const p = await res.json();
+    currentProduct = p;
+
+    document.getElementById("name").innerText = p.name;
+    document.getElementById("image").src = p.image;
+    document.getElementById("price").innerText = "₹" + p.price;
+    document.getElementById("category").innerText =
+      p.category + " / " + p.subcategory;
+
+  } catch {
+    document.body.innerHTML = "<h2>Product not found</h2>";
+  }
+}
+
+/**
+ * ADD TO CART (FIXED qty)
+ */
+document.getElementById("addToCartBtn")
+  .addEventListener("click", () => {
+
+  if (!currentProduct) return;
+
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const existing = cart.find(
+    item => String(item.id) === String(currentProduct.id)
+  );
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({
+      id: currentProduct.id,
+      name: currentProduct.name,
+      price: currentProduct.price,
+      image: currentProduct.image,
+      qty: 1
+    });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  alert("Added to cart");
+});
+
+function goToCart() {
+  window.location.href = "/cart.html";
+}
+
+loadPDP();
+</script>
+
+</body>
+</html>

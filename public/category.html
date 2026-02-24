@@ -55,45 +55,12 @@
       text-sm font-medium
     ">
 
-      <a href="/category.html?cat=Clothing"
-        class="hover:text-gray-300">
-        Clothing
-      </a>
-
-      <a href="/category.html?cat=Ethnics"
-        class="hover:text-gray-300">
-        Ethnics
-      </a>
-
-      <a href="/category.html?cat=Footwear"
-        class="hover:text-gray-300">
-        Footwear
-      </a>
-
-      <a href="/category.html?cat=Grooming"
-        class="hover:text-gray-300">
-        Grooming
-      </a>
-
-      <a href="/category.html?cat=Watches"
-        class="hover:text-gray-300">
-        Watches
-      </a>
-
-      <a href="/category.html?cat=Accessories"
-        class="hover:text-gray-300">
-        Accessories
-      </a>
-
-      <a href="/bulk-orders.html"
-        class="hover:text-gray-300">
-        Bulk Orders
-      </a>
-
-      <a href="/about.html"
-        class="hover:text-gray-300">
-        About Us
-      </a>
+      <a href="/category.html?cat=Clothing">Clothing</a>
+      <a href="/category.html?cat=Ethnics">Ethnics</a>
+      <a href="/category.html?cat=Footwear">Footwear</a>
+      <a href="/category.html?cat=Grooming">Grooming</a>
+      <a href="/category.html?cat=Watches">Watches</a>
+      <a href="/category.html?cat=Accessories">Accessories</a>
 
     </nav>
 
@@ -116,11 +83,17 @@
 
 <!-- TITLE -->
 <h2 id="title"
-  class="
-    text-3xl font-light
-    p-8
-  ">
+  class="text-3xl font-light p-8">
 </h2>
+
+<!-- SUBCATEGORY NAVBAR -->
+<div id="subcategoryNavbar"
+  class="
+    flex gap-3
+    px-8 pb-6
+    overflow-x-auto
+  ">
+</div>
 
 <!-- PRODUCTS GRID -->
 <div id="products"
@@ -135,34 +108,121 @@
 
 <script>
 
-/**
- * Get category from URL
- */
+/* ===============================
+   GET CATEGORY FROM URL
+================================= */
+
 const params =
   new URLSearchParams(
     window.location.search
   );
 
 const category =
-  params.get("cat");
+  params.get("cat") || "Footwear";
 
-/**
- * Set page title
- */
-document.getElementById(
-  "title"
-).innerText =
-  category + " Collection";
+/* ===============================
+   CATEGORY TREE
+================================= */
 
-/**
- * Load products from backend
- */
-async function loadProducts() {
+const CATEGORY_TREE = {
+
+  Footwear: [
+    "Sneakers",
+    "Running Shoes",
+    "Formal Shoes",
+    "Flip Flops",
+    "Other"
+  ],
+
+  Clothing: [
+    "Shirts",
+    "T-Shirts",
+    "Jeans",
+    "Jackets",
+    "Trousers",
+    "Shorts"
+  ],
+
+  Accessories: [
+    "Wallets",
+    "Belts",
+    "Sunglasses",
+    "Bags"
+  ],
+
+  Watches: [
+    "Analog Watches",
+    "Smart Watches"
+  ],
+
+  Grooming: [
+    "Perfumes",
+    "Trimmers",
+    "Facewash"
+  ]
+};
+
+/* ===============================
+   RENDER SUBCATEGORY NAVBAR
+================================= */
+
+function renderSubcategoryNavbar() {
+
+  const container =
+    document.getElementById(
+      "subcategoryNavbar"
+    );
+
+  if (!container) return;
+
+  const subs =
+    CATEGORY_TREE[category] || [];
+
+  container.innerHTML = "";
+
+  subs.forEach(sub => {
+
+    const btn =
+      document.createElement("button");
+
+    btn.className = `
+      px-4 py-2
+      bg-brand-cream
+      rounded-full
+      text-sm
+      hover:bg-brand-brown
+      hover:text-white
+      transition
+    `;
+
+    btn.innerText = sub;
+
+    btn.onclick = () =>
+      loadProducts(sub);
+
+    container.appendChild(btn);
+  });
+}
+
+/* ===============================
+   LOAD PRODUCTS
+================================= */
+
+async function loadProducts(
+  subcategory = ""
+) {
+
+  let url =
+    `/api/products?category=${encodeURIComponent(category)}`;
+
+  if (subcategory) {
+
+    url +=
+      `&subcategory=${encodeURIComponent(subcategory)}`;
+  }
 
   const res =
-    await fetch(
-      `/api/products?category=${category}`
-    );
+    await fetch(url);
 
   const products =
     await res.json();
@@ -171,6 +231,8 @@ async function loadProducts() {
     document.getElementById(
       "products"
     );
+
+  container.innerHTML = "";
 
   if (!products.length) {
 
@@ -184,116 +246,65 @@ async function loadProducts() {
 
     container.innerHTML += `
       <div class="
-        bg-white
-        rounded-xl
-        shadow
-        hover:shadow-lg
-        transition
-        p-4
+        bg-white rounded-xl shadow
+        hover:shadow-lg transition p-4
       ">
 
-        <!-- Product Image -->
         <img
-          src="${
-            p.image ||
-            "https://picsum.photos/300"
-          }"
+          src="${p.image}"
           class="
-            w-full h-44
-            object-cover
-            rounded-lg
-            mb-3
-            cursor-pointer
+            w-full h-44 object-cover
+            rounded-lg mb-3 cursor-pointer
           "
           onclick="goToProduct('${p.id}')"
         />
 
-        <!-- Product Name -->
         <h3 class="
-          font-semibold
-          mb-1
-          cursor-pointer
+          font-semibold mb-1 cursor-pointer
         "
         onclick="goToProduct('${p.id}')">
           ${p.name}
         </h3>
 
-        <!-- Price -->
         <p class="
-          text-brand-brown
-          font-medium
-          mb-3
+          text-brand-brown font-medium mb-3
         ">
           ₹${p.price}
         </p>
-
-        <!-- Add To Cart -->
-        <button
-          onclick='addToCart(${JSON.stringify(p).replace(/'/g,"&apos;")})'
-          class="
-            bg-brand-brown
-            text-white
-            w-full
-            py-2
-            rounded-lg
-            hover:bg-brand-dark
-            transition
-          "
-        >
-          Add to Cart
-        </button>
 
       </div>
     `;
   });
 }
 
-/**
- * Add product to cart
- */
-function addToCart(product) {
+/* ===============================
+   PDP REDIRECT
+================================= */
 
-  let cart =
-    JSON.parse(
-      localStorage.getItem("cart")
-    ) || [];
-
-  const existing =
-    cart.find(
-      item => item.id === product.id
-    );
-
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({
-      ...product,
-      qty: 1
-    });
-  }
-
-  localStorage.setItem(
-    "cart",
-    JSON.stringify(cart)
-  );
-
-  alert("Added to cart");
-}
-
-/**
- * Redirect to product page
- * (Detail page will be built next)
- */
 function goToProduct(id) {
 
   window.location.href =
     `/product.html?id=${id}`;
 }
 
-/**
- * Initialize
- */
-loadProducts();
+/* ===============================
+   INIT
+================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    document.getElementById(
+      "title"
+    ).innerText =
+      category + " Collection";
+
+    renderSubcategoryNavbar();
+    loadProducts();
+
+  }
+);
 
 </script>
 
