@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Category</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            bg: "#F5F1EC",
+            cream: "#EFE7DE",
+            brown: "#8B5E3C",
+            dark: "#4A3426",
+            charcoal: "#1F1F1F",
+            border: "#D6CFC7"
+          }
+        }
+      }
+    }
+  }
+  </script>
+</head>
+
+<body class="bg-brand-bg text-brand-dark">
+
+<!-- HEADER -->
+<header class="bg-brand-charcoal text-white">
+
+  <div class="
+    max-w-7xl mx-auto
+    flex items-center
+    justify-between
+    px-8 py-4
+  ">
+
+    <!-- Logo -->
+    <h1 class="
+      text-xl font-semibold
+      tracking-wide
+      cursor-pointer
+    "
+    onclick="window.location.href='/'">
+      DEKAIN
+    </h1>
+
+    <!-- Navigation -->
+    <nav class="
+      hidden md:flex
+      space-x-8
+      text-sm font-medium
+    ">
+
+      <a href="/category.html?cat=Clothing">Clothing</a>
+      <a href="/category.html?cat=Ethnics">Ethnics</a>
+      <a href="/category.html?cat=Footwear">Footwear</a>
+      <a href="/category.html?cat=Grooming">Grooming</a>
+      <a href="/category.html?cat=Watches">Watches</a>
+      <a href="/category.html?cat=Accessories">Accessories</a>
+
+    </nav>
+
+    <!-- Cart -->
+    <a href="/cart.html"
+      class="
+        border border-white
+        px-4 py-2
+        rounded-lg
+        hover:bg-white
+        hover:text-black
+        transition
+      ">
+      Cart 🛒
+    </a>
+
+  </div>
+
+</header>
+
+<!-- TITLE -->
+<h2 id="title"
+  class="text-3xl font-light p-8">
+</h2>
+
+<!-- SUBCATEGORY NAVBAR -->
+<div id="subcategoryNavbar"
+  class="
+    flex gap-3
+    px-8 pb-6
+    overflow-x-auto
+  ">
+</div>
+
+<!-- PRODUCTS GRID -->
+<div id="products"
+  class="
+    grid grid-cols-1
+    md:grid-cols-2
+    lg:grid-cols-3
+    gap-6
+    px-8 pb-12
+  ">
+</div>
+
+<script>
+
+/* ===============================
+   GET CATEGORY FROM URL
+================================= */
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const category =
+  params.get("cat") || "Footwear";
+
+/* ===============================
+   CATEGORY TREE
+================================= */
+
+const CATEGORY_TREE = {
+
+  Footwear: [
+    "Sneakers",
+    "Running Shoes",
+    "Formal Shoes",
+    "Flip Flops",
+    "Other"
+  ],
+
+  Clothing: [
+    "Shirts",
+    "T-Shirts",
+    "Jeans",
+    "Jackets",
+    "Trousers",
+    "Shorts"
+  ],
+
+  Accessories: [
+    "Wallets",
+    "Belts",
+    "Sunglasses",
+    "Bags"
+  ],
+
+  Watches: [
+    "Analog Watches",
+    "Smart Watches"
+  ],
+
+  Grooming: [
+    "Perfumes",
+    "Trimmers",
+    "Facewash"
+  ]
+};
+
+/* ===============================
+   RENDER SUBCATEGORY NAVBAR
+================================= */
+
+function renderSubcategoryNavbar() {
+
+  const container =
+    document.getElementById(
+      "subcategoryNavbar"
+    );
+
+  if (!container) return;
+
+  const subs =
+    CATEGORY_TREE[category] || [];
+
+  container.innerHTML = "";
+
+  subs.forEach(sub => {
+
+    const btn =
+      document.createElement("button");
+
+    btn.className = `
+      px-4 py-2
+      bg-brand-cream
+      rounded-full
+      text-sm
+      hover:bg-brand-brown
+      hover:text-white
+      transition
+    `;
+
+    btn.innerText = sub;
+
+    btn.onclick = () =>
+      loadProducts(sub);
+
+    container.appendChild(btn);
+  });
+}
+
+/* ===============================
+   LOAD PRODUCTS
+================================= */
+
+async function loadProducts(
+  subcategory = ""
+) {
+
+  let url =
+    `/api/products?category=${encodeURIComponent(category)}`;
+
+  if (subcategory) {
+
+    url +=
+      `&subcategory=${encodeURIComponent(subcategory)}`;
+  }
+
+  const res =
+    await fetch(url);
+
+  const products =
+    await res.json();
+
+  const container =
+    document.getElementById(
+      "products"
+    );
+
+  container.innerHTML = "";
+
+  if (!products.length) {
+
+    container.innerHTML =
+      "<p>No products found</p>";
+
+    return;
+  }
+
+  products.forEach(p => {
+
+    container.innerHTML += `
+      <div class="
+        bg-white rounded-xl shadow
+        hover:shadow-lg transition p-4
+      ">
+
+        <img
+          src="${p.image}"
+          class="
+            w-full h-44 object-cover
+            rounded-lg mb-3 cursor-pointer
+          "
+          onclick="goToProduct('${p.id}')"
+        />
+
+        <h3 class="
+          font-semibold mb-1 cursor-pointer
+        "
+        onclick="goToProduct('${p.id}')">
+          ${p.name}
+        </h3>
+
+        <p class="
+          text-brand-brown font-medium mb-3
+        ">
+          ₹${p.price}
+        </p>
+
+      </div>
+    `;
+  });
+}
+
+/* ===============================
+   PDP REDIRECT
+================================= */
+
+function goToProduct(id) {
+
+  window.location.href =
+    `/product.html?id=${id}`;
+}
+
+/* ===============================
+   INIT
+================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    document.getElementById(
+      "title"
+    ).innerText =
+      category + " Collection";
+
+    renderSubcategoryNavbar();
+    loadProducts();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
