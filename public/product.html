@@ -163,61 +163,47 @@ This item is only exchangeable for the same or a different size, if available, a
 <div class="max-w-7xl mx-auto px-8 py-12 grid md:grid-cols-4 gap-10 text-sm">
 
 
-<!-- ONLINE SHOPPING -->
-
 <div>
 
 <h3 class="font-semibold mb-4">ONLINE SHOPPING</h3>
 
 <ul class="space-y-2">
-
 <li><a href="/category.html?cat=Clothing">Clothing</a></li>
 <li><a href="/category.html?cat=Footwear">Footwear</a></li>
 <li><a href="/category.html?cat=Accessories">Accessories</a></li>
 <li><a href="/category.html?cat=Watches">Watches</a></li>
 <li><a href="/category.html?cat=Grooming">Grooming</a></li>
-
 </ul>
 
 </div>
 
-
-<!-- CUSTOMER POLICIES -->
 
 <div>
 
 <h3 class="font-semibold mb-4">CUSTOMER POLICIES</h3>
 
 <ul class="space-y-2">
-
 <li><a href="/contact.html">Contact Us</a></li>
 <li><a href="/faq.html">FAQ</a></li>
 <li><a href="/shipping.html">Shipping</a></li>
 <li><a href="/returns.html">Returns</a></li>
 <li><a href="/privacy.html">Privacy Policy</a></li>
-
 </ul>
 
 </div>
 
-
-<!-- USEFUL LINKS -->
 
 <div>
 
 <h3 class="font-semibold mb-4">USEFUL LINKS</h3>
 
 <ul class="space-y-2">
-
 <li><a href="/about.html">About Us</a></li>
 <li><a href="/bulk-orders.html">Bulk Orders</a></li>
-
 </ul>
 
 </div>
 
-
-<!-- TRUST SECTION -->
 
 <div>
 
@@ -236,8 +222,6 @@ This item is only exchangeable for the same or a different size, if available, a
 </div>
 
 
-<!-- COPYRIGHT -->
-
 <div class="border-t border-brand-border text-center py-4 text-sm">
 
 © 2026 Dekain. All rights reserved.
@@ -250,7 +234,6 @@ This item is only exchangeable for the same or a different size, if available, a
 
 <script>
 
-
 const params=new URLSearchParams(window.location.search)
 const id=params.get("id")
 
@@ -258,11 +241,39 @@ let currentProduct=null
 let selectedSize=null
 
 
+/* CATEGORY SIZE MAP */
+
+const SIZE_MAP={
+
+Clothing:["S","M","L","XL","XXL"],
+
+Ethnics:["S","M","L","XL","XXL"],
+
+Footwear:["6","7","8","9","10","11"],
+
+Accessories:["One Size"],
+
+Watches:["One Size"],
+
+Grooming:["One Size"]
+
+}
+
 
 function renderSizes(sizes){
 
 const container=document.getElementById("sizeOptions")
 container.innerHTML=""
+
+if(sizes.length===1 && sizes[0]==="One Size"){
+
+container.innerHTML=`<p class="text-sm border border-brand-border px-4 py-2 rounded inline-block">
+One Size
+</p>`
+
+selectedSize="One Size"
+return
+}
 
 sizes.forEach(size=>{
 
@@ -309,7 +320,10 @@ document.getElementById("price").innerText="₹"+p.price
 document.getElementById("category").innerText=
 p.category+" / "+p.subcategory
 
-renderSizes(p.sizes || ["S","M","L","XL"])
+
+const sizes=p.sizes || SIZE_MAP[p.category] || ["One Size"]
+
+renderSizes(sizes)
 
 }catch{
 
