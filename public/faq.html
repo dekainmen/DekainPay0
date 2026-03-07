@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Payment Success | Dekain</title>
+
+<title>FAQ | Dekain</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -26,7 +27,7 @@ border:"#D6CFC7"
 
 </head>
 
-<body class="bg-brand-bg text-brand-dark flex flex-col min-h-screen">
+<body class="bg-brand-bg text-brand-dark">
 
 
 <!-- HEADER -->
@@ -62,38 +63,66 @@ Cart 🛒
 
 
 
-<!-- SUCCESS CONTENT -->
+<!-- PAGE CONTENT -->
 
-<div class="flex-grow flex items-center justify-center px-8 py-20">
+<section class="max-w-6xl mx-auto px-8 py-16">
 
-<div class="bg-brand-cream border border-brand-border p-10 rounded-xl text-center shadow-lg max-w-md">
+<div class="flex justify-center mb-12">
 
-<h2 class="text-3xl font-light mb-4 text-green-700">
-Payment Successful
+<h2 class="bg-brand-cream border border-brand-border px-8 py-3 rounded-lg text-2xl font-semibold tracking-wide">
+Frequently Asked Questions
 </h2>
 
-<p class="mb-4">
-Your order has been placed successfully.
+</div>
+
+
+<div class="max-w-3xl mx-auto space-y-8">
+
+<div>
+<h3 class="font-semibold text-lg mb-1">
+Are your products original?
+</h3>
+<p class="text-gray-700">
+Yes, all Dekain products are 100% authentic and quality checked.
 </p>
+</div>
 
-<p id="orderId"
-class="text-sm text-gray-600 mb-6">
+<div>
+<h3 class="font-semibold text-lg mb-1">
+Do you offer Cash on Delivery?
+</h3>
+<p class="text-gray-700">
+Yes, Cash on Delivery may be available on selected orders.
 </p>
+</div>
 
-<a href="/"
-class="inline-block bg-brand-brown text-white px-6 py-2 rounded-lg hover:bg-brand-dark transition">
-Continue Shopping
-</a>
+<div>
+<h3 class="font-semibold text-lg mb-1">
+Can I exchange a product?
+</h3>
+<p class="text-gray-700">
+Yes, exchanges are available within 21 days for size changes if the size is available.
+</p>
+</div>
 
+<div>
+<h3 class="font-semibold text-lg mb-1">
+How long does delivery take?
+</h3>
+<p class="text-gray-700">
+Most orders are delivered within 3–7 business days depending on your location.
+</p>
 </div>
 
 </div>
+
+</section>
 
 
 
 <!-- FOOTER -->
 
-<footer class="bg-brand-cream border-t border-brand-border">
+<footer class="bg-brand-cream border-t border-brand-border mt-16">
 
 <div class="max-w-7xl mx-auto px-8 py-12 grid md:grid-cols-4 gap-10 text-sm">
 
@@ -133,8 +162,6 @@ Continue Shopping
 
 <ul class="space-y-2">
 <li><a href="/about.html">About Us</a></li>
-<li><a href="/blog.html">Blog</a></li>
-<li><a href="/careers.html">Careers</a></li>
 <li><a href="/bulk-orders.html">Bulk Orders</a></li>
 </ul>
 
@@ -153,30 +180,15 @@ Continue Shopping
 
 </div>
 
+
 <div class="border-t border-brand-border text-center py-4 text-sm">
+
 © 2026 Dekain. All rights reserved.
+
 </div>
 
 </footer>
 
-
-
-<script>
-
-/* Read order_id from URL */
-
-const params = new URLSearchParams(window.location.search)
-
-const orderId = params.get("order_id")
-
-if(orderId){
-
-document.getElementById("orderId").innerText =
-"Order ID: " + orderId
-
-}
-
-</script>
 
 </body>
 </html>

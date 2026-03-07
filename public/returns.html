@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Payment Success | Dekain</title>
+
+<title>Returns & Exchanges | Dekain</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -26,7 +27,7 @@ border:"#D6CFC7"
 
 </head>
 
-<body class="bg-brand-bg text-brand-dark flex flex-col min-h-screen">
+<body class="bg-brand-bg text-brand-dark">
 
 
 <!-- HEADER -->
@@ -62,38 +63,46 @@ Cart 🛒
 
 
 
-<!-- SUCCESS CONTENT -->
+<!-- PAGE CONTENT -->
 
-<div class="flex-grow flex items-center justify-center px-8 py-20">
+<section class="max-w-6xl mx-auto px-8 py-16">
 
-<div class="bg-brand-cream border border-brand-border p-10 rounded-xl text-center shadow-lg max-w-md">
+<div class="flex justify-center mb-12">
 
-<h2 class="text-3xl font-light mb-4 text-green-700">
-Payment Successful
+<h2 class="bg-brand-cream border border-brand-border px-8 py-3 rounded-lg text-2xl font-semibold tracking-wide">
+Returns & Exchanges
 </h2>
 
-<p class="mb-4">
-Your order has been placed successfully.
+</div>
+
+
+<div class="max-w-3xl mx-auto space-y-6 text-gray-700">
+
+<p>
+Dekain offers easy exchanges for products.
 </p>
 
-<p id="orderId"
-class="text-sm text-gray-600 mb-6">
-</p>
+<ul class="list-disc pl-6 space-y-3">
 
-<a href="/"
-class="inline-block bg-brand-brown text-white px-6 py-2 rounded-lg hover:bg-brand-dark transition">
-Continue Shopping
-</a>
+<li>Products can be exchanged within 21 days.</li>
+
+<li>Exchange is allowed only for size changes if available.</li>
+
+<li>Items must be unused and in original condition.</li>
+
+<li>Some items may not be eligible for returns.</li>
+
+</ul>
 
 </div>
 
-</div>
+</section>
 
 
 
 <!-- FOOTER -->
 
-<footer class="bg-brand-cream border-t border-brand-border">
+<footer class="bg-brand-cream border-t border-brand-border mt-16">
 
 <div class="max-w-7xl mx-auto px-8 py-12 grid md:grid-cols-4 gap-10 text-sm">
 
@@ -153,30 +162,15 @@ Continue Shopping
 
 </div>
 
+
 <div class="border-t border-brand-border text-center py-4 text-sm">
+
 © 2026 Dekain. All rights reserved.
+
 </div>
 
 </footer>
 
-
-
-<script>
-
-/* Read order_id from URL */
-
-const params = new URLSearchParams(window.location.search)
-
-const orderId = params.get("order_id")
-
-if(orderId){
-
-document.getElementById("orderId").innerText =
-"Order ID: " + orderId
-
-}
-
-</script>
 
 </body>
 </html>

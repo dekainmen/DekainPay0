@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Payment Success | Dekain</title>
+
+<title>Contact Us | Dekain</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -26,14 +27,14 @@ border:"#D6CFC7"
 
 </head>
 
-<body class="bg-brand-bg text-brand-dark flex flex-col min-h-screen">
+<body class="bg-brand-bg text-brand-dark">
 
 
 <!-- HEADER -->
 
-<header class="bg-brand-charcoal text-white">
+<div class="bg-brand-charcoal text-white">
 
-<div class="max-w-7xl mx-auto flex items-center justify-between px-8 py-4">
+<header class="max-w-7xl mx-auto flex items-center justify-between px-8 py-4">
 
 <h1 class="text-xl font-semibold tracking-wide cursor-pointer"
 onclick="window.location.href='/'">
@@ -56,34 +57,31 @@ class="border border-white px-4 py-2 rounded-lg bg-white text-black">
 Cart 🛒
 </a>
 
-</div>
-
 </header>
 
+</div>
 
 
-<!-- SUCCESS CONTENT -->
 
-<div class="flex-grow flex items-center justify-center px-8 py-20">
+<!-- PAGE CONTENT -->
 
-<div class="bg-brand-cream border border-brand-border p-10 rounded-xl text-center shadow-lg max-w-md">
+<div class="max-w-4xl mx-auto px-8 py-16 text-center">
 
-<h2 class="text-3xl font-light mb-4 text-green-700">
-Payment Successful
-</h2>
+<h1 class="text-3xl font-semibold mb-6">
+Contact Us
+</h1>
 
-<p class="mb-4">
-Your order has been placed successfully.
+<p class="mb-6">
+If you have any questions regarding your order, feel free to reach out.
 </p>
 
-<p id="orderId"
-class="text-sm text-gray-600 mb-6">
-</p>
+<div class="space-y-3">
 
-<a href="/"
-class="inline-block bg-brand-brown text-white px-6 py-2 rounded-lg hover:bg-brand-dark transition">
-Continue Shopping
-</a>
+<p><strong>Email:</strong> support@dekain.com</p>
+
+<p><strong>Phone:</strong> +91 90000 00000</p>
+
+<p><strong>Support Hours:</strong> Mon – Sat | 10AM – 6PM</p>
 
 </div>
 
@@ -93,7 +91,7 @@ Continue Shopping
 
 <!-- FOOTER -->
 
-<footer class="bg-brand-cream border-t border-brand-border">
+<footer class="bg-brand-cream border-t border-brand-border mt-16">
 
 <div class="max-w-7xl mx-auto px-8 py-12 grid md:grid-cols-4 gap-10 text-sm">
 
@@ -133,8 +131,6 @@ Continue Shopping
 
 <ul class="space-y-2">
 <li><a href="/about.html">About Us</a></li>
-<li><a href="/blog.html">Blog</a></li>
-<li><a href="/careers.html">Careers</a></li>
 <li><a href="/bulk-orders.html">Bulk Orders</a></li>
 </ul>
 
@@ -158,25 +154,6 @@ Continue Shopping
 </div>
 
 </footer>
-
-
-
-<script>
-
-/* Read order_id from URL */
-
-const params = new URLSearchParams(window.location.search)
-
-const orderId = params.get("order_id")
-
-if(orderId){
-
-document.getElementById("orderId").innerText =
-"Order ID: " + orderId
-
-}
-
-</script>
 
 </body>
 </html>
